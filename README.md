@@ -1,6 +1,6 @@
 # AlarmClock
 
-A single foreground alarm for a terminal on Windows, macOS, or Linux. It requires Python 3.11 or newer and a working desktop audio output. Keep the terminal open and the computer awake until the alarm rings.
+Foreground alarms for a terminal on Windows, macOS, or Linux. The app requires Python 3.11 or newer and a working desktop audio output. Keep the terminal open and the computer awake until all alarms ring.
 
 ## Install
 
@@ -18,18 +18,23 @@ On Windows, activate with `.venv\Scripts\activate` instead. Use the virtual envi
 
 ```sh
 python alarm.py --at 07:30
+python alarm.py --at 05:48 PM
+python alarm.py --alarms 3
+python alarm.py --alarms 3 --times "05:48 PM" "06:15 PM" "07:00 PM"
 python alarm.py --in 10
 python alarm.py --test-sound
 python alarm.py --help
 ```
 
-`--at` accepts a local 24-hour `HH:MM` time. If that time has passed or is exactly now, the alarm is set for tomorrow. The displayed target includes its date and UTC offset. Ambiguous and nonexistent times during daylight-saving changes are rejected. `--in` accepts 1 to 1,440 whole minutes; its countdown begins after the sound preview.
+`--at` accepts local 24-hour `HH:MM` or 12-hour `H:MM AM/PM` time. For 12-hour input, `05:48 PM` works as two arguments or as one quoted argument. `--alarms COUNT` asks for that many times, one by one, in an interactive terminal. If your command runner cannot accept typed responses, add `--times` with exactly COUNT quoted times. The alarms ring in time order, even if you enter them out of order.
 
-Every valid alarm begins with a two-second sound preview. If playback fails, the alarm is not armed. After the alarm rings, the sound repeats for up to 60 seconds. Press Ctrl+C to cancel at any stage.
+Each clock time is scheduled for today if it is still in the future, otherwise tomorrow. The displayed targets include their dates and UTC offsets. Ambiguous and nonexistent times during daylight-saving changes are rejected. `--in` accepts 1 to 1,440 whole minutes; its countdown begins after the sound preview.
+
+After all times are valid, the app plays one two-second sound preview before arming the alarms. If playback fails, none are armed. Each alarm sounds for up to 60 seconds. Press Ctrl+C to cancel all pending alarms at any stage.
 
 Exit codes: `0` for completion, help, or a successful standalone sound test; `1` for audio failures; `2` for invalid input or an invalid local time; `130` for cancellation.
 
-The alarm does not survive closing the terminal or computer sleep, and cannot wake a sleeping computer. Muted output or an output-device change can prevent notification. The app does not save, repeat, or snooze alarms.
+Alarms do not survive closing the terminal or computer sleep, and cannot wake a sleeping computer. Muted output or an output-device change can prevent notification. The app does not save alarms, repeat them on later days, or snooze them.
 
 ## Verification
 
